@@ -1,3 +1,11 @@
+import { useAxios } from "./utils/axios";
+
+const PROGRAMMERS_SIGN_IN =
+  "https://programmers.co.kr/api/v1/account/sign-in";
+
+const PROGRAMMERS_USER_RECORD =
+  "https://programmers.co.kr/api/v1/users/record";
+
 async function main() {
   const id = process.env.PROGRAMMERS_TOKEN_ID;
   const pw = process.env.PROGRAMMERS_TOKEN_PW;
