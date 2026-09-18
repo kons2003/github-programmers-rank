@@ -1,64 +1,9 @@
-name: github-programmers-rank
-
-on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-  schedule:
-    - cron: '0 5 * * 1-5'
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [24.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-    steps:
-    - uses: actions/checkout@v6
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v7
-      env: 
-        PROGRAMMERS_TOKEN_ID: ${{ secrets.PROGRAMMERS_TOKEN_ID }}
-        PROGRAMMERS_TOKEN_PW: ${{ secrets.PROGRAMMERS_TOKEN_PW }}
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run:  echo ${{ secrets.PROGRAMMERS_TOKEN_ID }}
-    - run: npm install
-    - run: npm run build
-    - run: |
-        touch .env
-        echo PROGRAMMERS_TOKEN_ID=${{ secrets.PROGRAMMERS_TOKEN_ID }} >> .env
-        echo PROGRAMMERS_TOKEN_PW=${{ secrets.PROGRAMMERS_TOKEN_PW }} >> .env
-        npm run start
-
-  cron:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [24.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-    steps:
-    - uses: actions/checkout@v6
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v7
-      env: 
-        PROGRAMMERS_TOKEN_ID: ${{ secrets.PROGRAMMERS_TOKEN_ID }}
-        PROGRAMMERS_TOKEN_PW: ${{ secrets.PROGRAMMERS_TOKEN_PW }}
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-#    - run:  echo ${{ secrets.PROGRAMMERS_TOKEN_ID }}
-    - run: npm install
-    - run: npm run build
-    - run: |
-        touch .env
-        echo PROGRAMMERS_TOKEN_ID=${{ secrets.PROGRAMMERS_TOKEN_ID }} >> .env
-        echo PROGRAMMERS_TOKEN_PW=${{ secrets.PROGRAMMERS_TOKEN_PW }} >> .env
-        npm run start
+- name: Check environment
+  env:
+    PROGRAMMERS_TOKEN_ID: ${{ secrets.PROGRAMMERS_TOKEN_ID }}
+    PROGRAMMERS_TOKEN_PW: ${{ secrets.PROGRAMMERS_TOKEN_PW }}
+    GH_PAT: ${{ secrets.GH_PAT }}
+  run: |
+    test -n "$PROGRAMMERS_TOKEN_ID" && echo "PROGRAMMERS_TOKEN_ID is set"
+    test -n "$PROGRAMMERS_TOKEN_PW" && echo "PROGRAMMERS_TOKEN_PW is set"
+    test -n "$GH_PAT" && echo "GH_PAT is set"
